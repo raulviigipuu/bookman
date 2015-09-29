@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.*?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="ee.viigipuu.bookman.controllers.BookEditDialogController"
+	hgap="5.0" vgap="5.0">
+
+	<Label text="Year: " GridPane.rowIndex="0" GridPane.columnIndex="0" />
+	<TextField fx:id="yearTF" GridPane.rowIndex="0"
+		GridPane.columnIndex="1" />
+
+	<Label text="Title: " GridPane.rowIndex="1" GridPane.columnIndex="0" />
+	<TextField fx:id="titleTF" GridPane.rowIndex="1"
+		GridPane.columnIndex="1" />
+
+	<Label text="Additional info: " GridPane.rowIndex="2"
+		GridPane.columnIndex="0" />
+	<TextField fx:id="additionalInfoTF" GridPane.rowIndex="2"
+		GridPane.columnIndex="1" />
+
+	<Label text="Author: " GridPane.rowIndex="3"
+		GridPane.columnIndex="0" />
+	<TextField fx:id="authorTF" GridPane.rowIndex="3"
+		GridPane.columnIndex="1" />
+
+	<Label text="Publisher: " GridPane.rowIndex="4"
+		GridPane.columnIndex="0" />
+	<TextField fx:id="publisherTF" GridPane.rowIndex="4"
+		GridPane.columnIndex="1" />
+
+	<Label text="Year published: " GridPane.rowIndex="5"
+		GridPane.columnIndex="0" />
+	<TextField fx:id="yearPublishedTF" GridPane.rowIndex="5"
+		GridPane.columnIndex="1" />
+
+	<Label text="Year first published: " GridPane.rowIndex="6"
+		GridPane.columnIndex="0" />
+	<TextField fx:id="yearFirstPublishedTF" GridPane.rowIndex="6"
+		GridPane.columnIndex="1" />
+
+	<Label text="Page count: " GridPane.rowIndex="7"
+		GridPane.columnIndex="0" />
+	<TextField fx:id="pageCountTF" GridPane.rowIndex="7"
+		GridPane.columnIndex="1" />
+		
+	<Label text="Qoute text: " GridPane.rowIndex="8"
+		GridPane.columnIndex="0" />
+	<TextField fx:id="quoteTextTF" GridPane.rowIndex="8"
+		GridPane.columnIndex="1" />
+		
+	<Label text="Quote page: " GridPane.rowIndex="9"
+		GridPane.columnIndex="0" />
+	<TextField fx:id="quotePageTF" GridPane.rowIndex="9"
+		GridPane.columnIndex="1" />
+		
+	<Label text="Source name: " GridPane.rowIndex="10"
+		GridPane.columnIndex="0" />
+	<TextField fx:id="sourceNameTF" GridPane.rowIndex="10"
+		GridPane.columnIndex="1" />
+		
+	<Label text="Source url: " GridPane.rowIndex="11"
+		GridPane.columnIndex="0" />
+	<TextField fx:id="sourceUrlTF" GridPane.rowIndex="11"
+		GridPane.columnIndex="1" />
+		
+	<Button text="OK" GridPane.rowIndex="12" GridPane.columnIndex="0" onAction="#handleOK" />
+	<Button text="Cancel" GridPane.rowIndex="12" GridPane.columnIndex="1" onAction="#handleCancel" />
+
+</GridPane>

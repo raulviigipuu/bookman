@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="ee.viigipuu.bookman.controllers.BookController">
+	<top>
+		<VBox>
+			<MenuBar>
+				<menus>
+					<Menu text="File">
+						<items>
+							<MenuItem text="New book entry" onAction="#handleNewBook" />
+							<MenuItem text="Exit" onAction="#handleExit" />
+						</items>
+					</Menu>
+				</menus>
+			</MenuBar>
+		</VBox>
+	</top>
+	<center>
+		<SplitPane dividerPositions="1.0" focusTraversable="true">
+			<items>
+				<ScrollPane disable="false" visible="true" fitToWidth="true" fitToHeight="true">
+					<content>
+						<TableView fx:id="bookTableView" editable="false">
+							<columns>
+								<TableColumn text="Year" fx:id="yearColumn" />
+								<TableColumn text="Title" fx:id="titleColumn" />
+								<TableColumn text="Additional info" fx:id="additionalInfoColumn" />
+								<TableColumn text="Author" fx:id="authorColumn" />
+								<TableColumn text="Publisher" fx:id="publisherColumn" />
+								<TableColumn text="Year published" fx:id="yearPublishedColumn" />
+								<TableColumn text="First published" fx:id="yearFirstPublishedColumn" />
+								<TableColumn text="Page count" fx:id="pageCountColumn" />
+							</columns>
+						</TableView>
+					</content>
+				</ScrollPane>
+				<BorderPane>
+					<center>
+						<GridPane hgap="5.0" vgap="5.0">
+							<Label text="Year: " GridPane.rowIndex="0" GridPane.columnIndex="0" />
+							<Label fx:id="yearLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+							
+							<Label text="Title: " GridPane.rowIndex="1" GridPane.columnIndex="0" />
+							<Label fx:id="titleLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+							
+							<Label text="Additional info: " GridPane.rowIndex="2" GridPane.columnIndex="0" />
+							<Label fx:id="additionalInfoLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+							
+							<Label text="Author: " GridPane.rowIndex="3" GridPane.columnIndex="0" />
+							<Label fx:id="authorLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+							
+							<Label text="Publisher: " GridPane.rowIndex="4" GridPane.columnIndex="0" />
+							<Label fx:id="publisherLabel" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+							
+							<Label text="Year published: " GridPane.rowIndex="5" GridPane.columnIndex="0" />
+							<Label fx:id="yearPublishedLabel" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+							
+							<Label text="Year first published: " GridPane.rowIndex="6" GridPane.columnIndex="0" />
+							<Label fx:id="yearFirstPublishedLabel" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+							
+							<Label text="Page count: " GridPane.rowIndex="7" GridPane.columnIndex="0" />
+							<Label fx:id="pageCountLabel" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+							
+							<Label text="Quote text: " GridPane.rowIndex="8" GridPane.columnIndex="0" />
+							<Label fx:id="quoteTextLabel" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+							
+							<Label text="Quote page: " GridPane.rowIndex="9" GridPane.columnIndex="0" />
+							<Label fx:id="quotePageLabel" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+							
+							<Label text="Source name: " GridPane.rowIndex="10" GridPane.columnIndex="0" />
+							<Label fx:id="sourceNameLabel" GridPane.rowIndex="10" GridPane.columnIndex="1" />
+							
+							<Label text="Source url: " GridPane.rowIndex="11" GridPane.columnIndex="0" />
+							<Label fx:id="sourceUrlLabel" GridPane.rowIndex="11" GridPane.columnIndex="1" />
+						</GridPane>
+					</center>
+					<bottom>
+						<HBox>
+							<Button text="Edit" onAction="#handleEditBook" />
+							<Button text="Delete" onAction="#handleDeleteBook" />
+						</HBox>
+					</bottom>
+				</BorderPane>
+			</items>
+		</SplitPane>
+	</center>
+</BorderPane>

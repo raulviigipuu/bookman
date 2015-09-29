@@ -1,0 +1,17 @@
+<readingList>
+  <year value="2015" comment="incomplete">
+    <book>
+      <title>1984</title>
+      <additionalInfo>sample data</additionalInfo>
+      <author>George Orwell</author>
+      <publisher>Penguin; New Ed edition (January 29, 2004)</publisher>
+      <yearPublished>2004</yearPublished>
+      <yearFirstPublished>1949</yearFirstPublished>
+      <pageCount>340</pageCount>
+      <quoteText></quoteText>
+      <quotePage></quotePage>
+      <sourceName>Amazon</sourceName>
+      <sourceUrl>http://www.amazon.com/Nineteen-Eighty-Four-George-Orwell-ebook/dp/B002RI991O</sourceUrl>
+    </book>
+  </year>
+</readingList>
