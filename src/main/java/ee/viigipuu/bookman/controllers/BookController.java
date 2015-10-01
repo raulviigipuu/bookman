@@ -2,9 +2,12 @@ package ee.viigipuu.bookman.controllers;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,6 +34,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.DirectoryChooser;
 
 /***
  * Controller for main view
@@ -88,6 +92,7 @@ public class BookController implements Initializable {
 	private ReadingList readingList;
 
 	private static final String FILE_PATH = "./books.xml";
+	private static final String JSON_FILE_NAME = "books.json";
 
 	public BookController() {}
 
@@ -138,6 +143,30 @@ public class BookController implements Initializable {
 
 			bookListObservable.add(0, tempBook);
 			booksToXml(bookListObservable);
+			booksFromXml(); // To update this.readingList for JSON export
+		}
+	}
+
+	// File -> Export to JSON
+	@FXML
+	private void handleJsonExport() {
+
+		String jsonStr = "";
+		if(this.readingList != null && this.readingList.getYearList() != null && this.readingList.getYearList().size() > 0) {
+
+			jsonStr = constructJson();
+
+			final DirectoryChooser directoryChooser = new DirectoryChooser();
+			final File selectedDirectory = directoryChooser.showDialog(mainApp.getPrimaryStage());
+			if(selectedDirectory != null) {
+
+				selectedDirectory.getAbsolutePath();
+			}
+			File jsonFile = new File(selectedDirectory, JSON_FILE_NAME);
+			writeStringToFile(jsonFile, jsonStr);
+		} else {
+
+			alert("Empty list!", "Nothing to export!", "There no items in list!");
 		}
 	}
 
@@ -157,13 +186,7 @@ public class BookController implements Initializable {
 		} else {
 
 			// Nothing selected
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No book Selected");
-            alert.setContentText("Please select a book in the table.");
-
-            alert.showAndWait();
+			alert("No Selection", "No book Selected", "Please select a book in the table.");
 		}
 	}
 
@@ -180,14 +203,76 @@ public class BookController implements Initializable {
 	    } else {
 
 	    	// Nothing selected
-	    	Alert alert = new Alert(AlertType.WARNING);
-	    	alert.initOwner(mainApp.getPrimaryStage());
-	    	alert.setTitle("No selection!");
-	    	alert.setHeaderText("No book selected!");
-	    	alert.setContentText("Select something in the table.");
-
-	    	alert.showAndWait();
+	    	alert("No selection!", "No book selected!", "Select something in the table.");
 	    }
+	}
+
+	// Makes correctly formatted JSON string
+	private String constructJson() {
+
+		StringBuilder jsonBuilder = new StringBuilder();
+
+		jsonBuilder.append("{\"readingList\": [\n\t{\n");
+
+		List<Year> yearList = this.readingList.getYearList();
+		for(int j = 0; j < yearList.size(); j++) {
+
+			jsonBuilder.append("\t\t\"year\": \"").append(yearList.get(j).getYear()).append("\",\n");
+			jsonBuilder.append("\t\t\"comment\": \"").append((yearList.get(j).getComment() != null) ? yearList.get(j).getComment() : "").append("\",\n");
+			jsonBuilder.append("\t\t\"bookList\": [");
+			List<BookEntry> bookList = yearList.get(j).getBookList();
+			for(int i = 0; i < bookList.size(); i++) {
+
+				jsonBuilder.append("{\n\t\t\t\"title\": \"").append(bookList.get(i).getTitle().replace("\"", "\\\"")).append("\",\n");
+				jsonBuilder.append("\t\t\t\"additionalInfo\": \"").append(bookList.get(i).getAdditionalInfo().replace("\"", "\\\"")).append("\",\n");
+				jsonBuilder.append("\t\t\t\"author\": \"").append(bookList.get(i).getAuthor().replace("\"", "\\\"")).append("\",\n");
+				jsonBuilder.append("\t\t\t\"publisher\": \"").append(bookList.get(i).getPublisher()).append("\",\n");
+				jsonBuilder.append("\t\t\t\"yearPublished\": \"").append(bookList.get(i).getYearPublished()).append("\",\n");
+				jsonBuilder.append("\t\t\t\"yearFirstPublished\": \"").append(bookList.get(i).getYearFirstPublished()).append("\",\n");
+				jsonBuilder.append("\t\t\t\"pageCount\": \"").append(bookList.get(i).getPageCount()).append("\",\n");
+				if(bookList.get(i).getQuoteText() != null && bookList.get(i).getQuoteText().length() > 0) {
+
+					jsonBuilder.append("\t\t\t\"quote\": {\n");
+					jsonBuilder.append("\t\t\t\t\"quote\": \"").append(bookList.get(i).getQuoteText().replace("\"", "\\\"")).append("\",\n");
+					jsonBuilder.append("\t\t\t\t\"page\": \"").append(bookList.get(i).getQuotePage()).append("\"\n");
+					jsonBuilder.append("\t\t\t},\n");
+				} else {
+					jsonBuilder.append("\t\t\t\"quote\": \"").append(bookList.get(i).getQuoteText()).append("\",\n");
+				}
+				if(bookList.get(i).getSourceName() != null && bookList.get(i).getSourceName().length() > 0) {
+
+					jsonBuilder.append("\t\t\t\"source\": {\n");
+					jsonBuilder.append("\t\t\t\t\"name\": \"").append(bookList.get(i).getSourceName()).append("\",\n");
+					jsonBuilder.append("\t\t\t\t\"url\": \"").append(bookList.get(i).getSourceUrl()).append("\"\n");
+					// End of the list?
+					if(i < (bookList.size() - 1)) {
+
+						jsonBuilder.append("\t\t\t}\n\t\t},");
+					} else {
+						jsonBuilder.append("\t\t\t}\n\t\t}");
+					}
+				} else {
+					jsonBuilder.append("\t\t\t\"source\": \"\"\n");
+					// End of the list?
+					if(i < (bookList.size() - 1)) {
+
+						jsonBuilder.append("\t\t},");
+					} else {
+						jsonBuilder.append("\t\t}");
+					}
+				}
+			}
+			// End of the list?
+			if(j < (yearList.size() - 1)) {
+
+				jsonBuilder.append("]\n\t},{\n");
+			} else {
+				jsonBuilder.append("]\n\t}\n");
+			}
+		}
+		jsonBuilder.append("]}\n");
+
+		return jsonBuilder.toString();
 	}
 
 	// Display book details in main window
@@ -227,6 +312,25 @@ public class BookController implements Initializable {
 		quotePageLabel.setText("");
 		sourceNameLabel.setText("");
 		sourceUrlLabel.setText("");
+	}
+
+	/***
+	 * Display alert
+	 *
+	 * @param title
+	 * @param header
+	 * @param text
+	 */
+	private void alert(String title, String header, String text) {
+
+		Alert alert = new Alert(AlertType.WARNING);
+
+	    alert.initOwner(mainApp.getPrimaryStage());
+	    alert.setTitle(title);
+	    alert.setHeaderText(header);
+	    alert.setContentText(text);
+
+	    alert.showAndWait();
 	}
 
 	// Read books from xml file
@@ -356,5 +460,21 @@ public class BookController implements Initializable {
 		}
 
 		return fileContent;
+	}
+
+	// Write string to file
+	public void writeStringToFile(File file, String content) {
+
+		try {
+
+			OutputStreamWriter outStreamWriter = new OutputStreamWriter(
+					new FileOutputStream(file.getAbsoluteFile()), Charset.forName("UTF-8").newEncoder());
+			outStreamWriter.write(content);
+			outStreamWriter.flush();
+			outStreamWriter.close();
+		} catch(IOException ioe) {
+
+			ioe.printStackTrace();
+		}
 	}
 }

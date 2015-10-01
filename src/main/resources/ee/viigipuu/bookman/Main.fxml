@@ -16,6 +16,7 @@
 					<Menu text="File">
 						<items>
 							<MenuItem text="New book entry" onAction="#handleNewBook" />
+							<MenuItem text="Export to JSON" onAction="#handleJsonExport" />
 							<MenuItem text="Exit" onAction="#handleExit" />
 						</items>
 					</Menu>

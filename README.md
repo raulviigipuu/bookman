@@ -15,5 +15,8 @@ App uses books.xml in root folder as data file. If it doesn't exist, it will be 
 
 ## Todo
 
-JSON export
+- Text wrap on detail view
+- Switch to JAXB to get rid of the XStream dependency
+- Add sorting and filtering
+
 
